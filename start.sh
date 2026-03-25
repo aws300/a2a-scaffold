@@ -91,8 +91,14 @@ build_frontend() {
   if [ ! -f "frontend/dist/scaffold/index.html" ]; then
     log "Building frontend..."
     cd frontend
+    # Ensure node_modules has correct platform binaries
+    # (lightningcss/esbuild have platform-specific native modules)
+    if [ -d "node_modules" ] && ! node -e "require('lightningcss')" 2>/dev/null; then
+      warn "node_modules has wrong platform binaries, reinstalling..."
+      rm -rf node_modules
+    fi
     if [ ! -d "node_modules" ]; then
-      npm install --legacy-peer-deps --silent
+      npm install --legacy-peer-deps
     fi
     npx vite build --config vite.config.scaffold.ts
     cd ..
@@ -172,8 +178,12 @@ start_dev() {
   # Start Vite dev server with proxy
   log "Starting frontend dev server on :5173..."
   cd frontend
+  if [ -d "node_modules" ] && ! node -e "require('lightningcss')" 2>/dev/null; then
+    warn "node_modules has wrong platform binaries, reinstalling..."
+    rm -rf node_modules
+  fi
   if [ ! -d "node_modules" ]; then
-    npm install --legacy-peer-deps --silent
+    npm install --legacy-peer-deps
   fi
   npx vite --config vite.config.scaffold.ts --port 5173 &
   FRONTEND_PID=$!
