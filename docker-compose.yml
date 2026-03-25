@@ -1,0 +1,14 @@
+services:
+  agent:
+    build: .
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./agent-config:/agent/config
+      - ./AGENT.md:/agent/config/AGENT.md
+      - agent-data:/agent/data
+    env_file:
+      - .env
+
+volumes:
+  agent-data:

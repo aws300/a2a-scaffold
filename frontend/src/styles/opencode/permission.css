@@ -1,0 +1,221 @@
+/* ============================================
+   PermissionPrompt - Permission request UI
+   Adapted from OpenCode for AgentX
+   ============================================ */
+
+.permission-prompt {
+  display: flex;
+  flex-direction: column;
+  border-radius: 0.75rem;
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.05), rgba(255, 255, 255, 0.4));
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  overflow: hidden;
+  padding: 1rem;
+  margin: 0.5rem 0;
+}
+
+.permission-prompt-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.permission-prompt-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 0.5rem;
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  flex-shrink: 0;
+}
+
+.permission-prompt-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.permission-prompt-title {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.25rem;
+}
+
+.permission-prompt-subtitle {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+}
+
+.permission-prompt-tool-name {
+  font-family: 'SF Mono', 'Monaco', 'Inconsolata', monospace;
+  background: rgba(0, 0, 0, 0.05);
+  padding: 0.125rem 0.375rem;
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+}
+
+.permission-prompt-tool-desc {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 300px;
+}
+
+.permission-prompt-message {
+  margin-top: 0.75rem;
+  padding: 0.75rem;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+.permission-prompt-preview {
+  margin-top: 0.75rem;
+  background: rgba(0, 0, 0, 0.03);
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.permission-prompt-code {
+  padding: 0.75rem;
+  font-family: 'SF Mono', 'Monaco', 'Inconsolata', monospace;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  white-space: pre-wrap;
+  word-break: break-all;
+  margin: 0;
+  max-height: 150px;
+  overflow-y: auto;
+}
+
+.permission-prompt-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+/* Permission buttons */
+.permission-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+}
+
+.permission-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.permission-btn-deny {
+  background: transparent;
+  color: var(--text-muted);
+  border-color: rgba(0, 0, 0, 0.1);
+}
+
+.permission-btn-deny:hover:not(:disabled) {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  border-color: rgba(239, 68, 68, 0.2);
+}
+
+.permission-btn-always {
+  background: rgba(34, 197, 94, 0.1);
+  color: #16a34a;
+  border-color: rgba(34, 197, 94, 0.2);
+}
+
+.permission-btn-always:hover:not(:disabled) {
+  background: rgba(34, 197, 94, 0.2);
+}
+
+.permission-btn-once {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+}
+
+.permission-btn-once:hover:not(:disabled) {
+  background: var(--primary-hover, var(--primary));
+  filter: brightness(0.95);
+}
+
+.permission-loading-spinner {
+  width: 0.875rem;
+  height: 0.875rem;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: permission-spin 0.8s linear infinite;
+}
+
+@keyframes permission-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Permission display (for completed permissions) */
+.permission-display {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
+  font-size: 0.8125rem;
+}
+
+.permission-display-allowed {
+  background: rgba(34, 197, 94, 0.1);
+  color: #16a34a;
+}
+
+.permission-display-denied {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+}
+
+.permission-display-tool {
+  font-family: 'SF Mono', 'Monaco', 'Inconsolata', monospace;
+  font-size: 0.75rem;
+}
+
+.permission-display-status {
+  margin-left: auto;
+  font-weight: 500;
+}
+
+/* Tool part wrapper with permission overlay */
+.tool-part-wrapper {
+  position: relative;
+}
+
+.tool-part-wrapper[data-permission="true"] .basic-tool {
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.tool-part-wrapper[data-question="true"] .basic-tool {
+  opacity: 0.7;
+  pointer-events: none;
+}

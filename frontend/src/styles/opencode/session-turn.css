@@ -1,0 +1,133 @@
+/* ============================================
+   SessionTurn Component Styles
+   Handles the user/assistant turn display with steps expand/collapse
+   ============================================ */
+
+/* Turn container - prevent layout thrashing during streaming */
+.session-turn {
+  /* Animation on entry */
+  contain: layout style;
+  will-change: contents;
+}
+
+/* Steps trigger button */
+.session-turn-trigger {
+  display: flex;
+  align-items: center;
+  margin-left: 0.5rem;
+}
+
+.session-turn-trigger button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.375rem 0.75rem;
+  font-size: 0.875rem;
+  color: var(--text-muted, #6b7280);
+  border-radius: 0.5rem;
+  transition: all 0.2s ease;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.session-turn-trigger button:hover {
+  color: var(--text-primary, #111827);
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.session-turn-status-text {
+  font-weight: 500;
+}
+
+/* Steps content area - optimize rendering during updates */
+.session-turn-steps {
+  padding-left: 1rem;
+  margin-left: 0.5rem;
+  border-left: 2px solid rgba(var(--primary-rgb, 231, 76, 60), 0.2);
+  animation: slideDown 0.2s ease-out;
+  contain: layout;
+}
+
+/* Each step item should also be contained */
+.session-turn-steps > * {
+  contain: layout style;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Response summary */
+.session-turn-summary {
+  animation: fadeIn 0.3s ease-out;
+  contain: layout style;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Tool part wrapper with permission/question states */
+.tool-part-wrapper {
+  position: relative;
+  contain: style;
+}
+
+.tool-part-wrapper[data-permission="true"],
+.tool-part-wrapper[data-question="true"] {
+  /* Highlight the tool when waiting for permission/question */
+}
+
+.tool-part-wrapper[data-permission="true"]::before,
+.tool-part-wrapper[data-question="true"]::before {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 12px;
+  background: linear-gradient(
+    135deg,
+    rgba(var(--primary-rgb, 231, 76, 60), 0.1),
+    rgba(var(--primary-rgb, 231, 76, 60), 0.05)
+  );
+  z-index: -1;
+}
+
+/* Markdown content - prevent layout shifts during streaming */
+.markdown-content {
+  contain: layout style;
+  min-height: 1.5em;
+}
+
+/* Streaming text indicator - smooth animation */
+.streaming-text {
+  position: relative;
+}
+
+.streaming-text::after {
+  content: '';
+  display: inline-block;
+  width: 2px;
+  height: 1em;
+  background: var(--primary, #e74c3c);
+  margin-left: 2px;
+  animation: blink 0.8s step-end infinite;
+  vertical-align: text-bottom;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}

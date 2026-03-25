@@ -1,0 +1,18 @@
+apis:
+  httpAddr: ":8080"
+
+dependencies:
+  # Default: AWS Bedrock (requires AWS_DEFAULT_REGION + AWS credentials)
+  # Override with MODEL env var or edit this file
+  # Examples:
+  #   bedrock://us.anthropic.claude-opus-4-6-v1?region=us-west-2&max_tokens=16384
+  #   anthropic://claude-3-5-sonnet-20241022
+  model: "bedrock://us.anthropic.claude-opus-4-6-v1?region=us-west-2&max_tokens=16384"
+
+service:
+  dataBasePath: "/agent/data"
+  baseURL: "http://localhost:8080"
+  agent_name: "A2A Agent"
+  agent_description: "A standalone A2A agent"
+  skills_dir: "/agent/config/skills"
+  mcp_config_path: "/agent/config/mcp.json"

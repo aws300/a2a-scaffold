@@ -1,0 +1,23 @@
+# Convenience wrapper so the package can be installed without hatch.
+# Keep in sync with pyproject.toml [project.dependencies].
+grpcio>=1.68.0
+grpcio-reflection>=1.68.0
+grpcio-health-checking>=1.68.0
+protobuf>=6.33.5,<7.0.0
+googleapis-common-protos>=1.65.0
+connect-python>=0.8.1
+hypercorn>=0.17.0
+uvloop>=0.21.0
+anyio>=4.7.0
+structlog>=24.4.0
+pydantic>=2.9.0
+pyyaml>=6.0.2
+httpx[http2]>=0.28.0
+# Cryptography — RSA key parsing + JWT signature verification (OIDC auth)
+# Optional runtime drivers
+# AWS SDK for memory subsystem (DynamoDB short-term + Bedrock AgentCore long-term)
+# Strands Agent SDK (AI agent with tools, per-token streaming)
+strands-agents>=1.29.0
+strands-agents-tools>=0.2.22
+# AG-UI protocol — standard agent-UI event types for real-time status updates
+ag-ui-protocol>=0.1.10

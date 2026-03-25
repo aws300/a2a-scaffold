@@ -1,0 +1,174 @@
+/* ============================================
+   BasicTool - Collapsible tool container
+   Adapted from OpenCode for AgentX
+   ============================================ */
+
+.basic-tool {
+  display: flex;
+  flex-direction: column;
+  border-radius: 0.75rem;
+  background: rgba(255, 255, 255, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  overflow: hidden;
+  transition: all 0.2s ease;
+}
+
+.basic-tool:hover {
+  background: rgba(255, 255, 255, 0.45);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.basic-tool-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.basic-tool-header:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.basic-tool-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 0.5rem;
+  background: rgba(255, 255, 255, 0.5);
+  flex-shrink: 0;
+}
+
+.basic-tool-icon-pending {
+  color: var(--text-muted);
+}
+
+.basic-tool-icon-running {
+  color: var(--primary);
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.basic-tool-icon-completed {
+  color: #22c55e;
+}
+
+.basic-tool-icon-error {
+  color: #ef4444;
+}
+
+.basic-tool-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.basic-tool-title {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.basic-tool-subtitle {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 0.125rem;
+}
+
+.basic-tool-status {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  flex-shrink: 0;
+}
+
+.basic-tool-status-icon {
+  font-size: 1rem;
+}
+
+.basic-tool-chevron {
+  color: var(--text-muted);
+  transition: transform 0.2s ease;
+  flex-shrink: 0;
+}
+
+.basic-tool-chevron-open {
+  transform: rotate(180deg);
+}
+
+.basic-tool-body {
+  border-top: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.basic-tool-output {
+  padding: 0.75rem 1rem;
+  font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Mono', 'Droid Sans Mono', 'Source Code Pro', monospace;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-x: auto;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.basic-tool-error {
+  padding: 0.75rem 1rem;
+  color: #ef4444;
+  font-size: 0.8125rem;
+  background: rgba(239, 68, 68, 0.05);
+}
+
+.basic-tool-metadata {
+  padding: 0.5rem 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.basic-tool-metadata-item {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.5rem;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 0.375rem;
+}
+
+/* Streaming animation */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Tool specific styles */
+.basic-tool-file-path {
+  font-family: 'SF Mono', 'Monaco', 'Inconsolata', monospace;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  background: rgba(0, 0, 0, 0.05);
+  padding: 0.125rem 0.375rem;
+  border-radius: 0.25rem;
+}
+
+.basic-tool-command {
+  font-family: 'SF Mono', 'Monaco', 'Inconsolata', monospace;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}

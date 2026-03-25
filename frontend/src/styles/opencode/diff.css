@@ -1,0 +1,242 @@
+/* ============================================
+   Diff - File diff display component
+   Adapted from OpenCode for AgentX
+   ============================================ */
+
+.diff-container {
+  font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Mono', 'Droid Sans Mono', 'Source Code Pro', monospace;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  background: #1e1e2e;
+}
+
+.diff-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.625rem 1rem;
+  background: #313244;
+  border-bottom: 1px solid #45475a;
+}
+
+.diff-header-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #cdd6f4;
+  font-size: 0.8125rem;
+  font-weight: 500;
+}
+
+.diff-header-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.diff-header-btn {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  border-radius: 0.25rem;
+  color: #a6adc8;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.diff-header-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: #cdd6f4;
+}
+
+.diff-header-btn-active {
+  background: rgba(var(--primary-rgb), 0.2);
+  color: var(--primary);
+}
+
+/* Unified diff view */
+.diff-unified {
+  overflow-x: auto;
+}
+
+.diff-line {
+  display: flex;
+  min-height: 1.5rem;
+}
+
+.diff-line-number {
+  width: 3.5rem;
+  padding: 0 0.5rem;
+  text-align: right;
+  color: #6c7086;
+  background: #181825;
+  user-select: none;
+  flex-shrink: 0;
+}
+
+.diff-line-content {
+  flex: 1;
+  padding: 0 0.75rem;
+  white-space: pre;
+}
+
+/* Line types */
+.diff-line-add {
+  background: rgba(166, 227, 161, 0.15);
+}
+
+.diff-line-add .diff-line-content {
+  color: #a6e3a1;
+}
+
+.diff-line-add .diff-line-number {
+  background: rgba(166, 227, 161, 0.1);
+}
+
+.diff-line-remove {
+  background: rgba(243, 139, 168, 0.15);
+}
+
+.diff-line-remove .diff-line-content {
+  color: #f38ba8;
+}
+
+.diff-line-remove .diff-line-number {
+  background: rgba(243, 139, 168, 0.1);
+}
+
+.diff-line-context {
+  background: transparent;
+}
+
+.diff-line-context .diff-line-content {
+  color: #cdd6f4;
+}
+
+/* Chunk header */
+.diff-chunk-header {
+  padding: 0.5rem 1rem;
+  background: #313244;
+  color: #89b4fa;
+  font-size: 0.75rem;
+  border-top: 1px solid #45475a;
+  border-bottom: 1px solid #45475a;
+}
+
+/* Side-by-side view */
+.diff-split {
+  display: flex;
+  overflow-x: auto;
+}
+
+.diff-split-side {
+  flex: 1;
+  min-width: 0;
+}
+
+.diff-split-side:first-child {
+  border-right: 1px solid #45475a;
+}
+
+.diff-split-side-header {
+  padding: 0.5rem 0.75rem;
+  background: #313244;
+  color: #a6adc8;
+  font-size: 0.75rem;
+  font-weight: 500;
+  border-bottom: 1px solid #45475a;
+}
+
+.diff-split-side-header-old {
+  color: #f38ba8;
+}
+
+.diff-split-side-header-new {
+  color: #a6e3a1;
+}
+
+/* Inline highlights */
+.diff-highlight-add {
+  background: rgba(166, 227, 161, 0.3);
+  border-radius: 2px;
+}
+
+.diff-highlight-remove {
+  background: rgba(243, 139, 168, 0.3);
+  border-radius: 2px;
+}
+
+/* Statistics */
+.diff-stats {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.5rem 1rem;
+  background: #181825;
+  border-top: 1px solid #45475a;
+  font-size: 0.75rem;
+}
+
+.diff-stats-additions {
+  color: #a6e3a1;
+}
+
+.diff-stats-deletions {
+  color: #f38ba8;
+}
+
+/* Empty state */
+.diff-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  color: #6c7086;
+  font-size: 0.875rem;
+}
+
+/* Loading state */
+.diff-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  color: #a6adc8;
+}
+
+.diff-loading-spinner {
+  width: 1.25rem;
+  height: 1.25rem;
+  border: 2px solid #45475a;
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin-right: 0.75rem;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Scrollbar styling */
+.diff-container::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.diff-container::-webkit-scrollbar-track {
+  background: #181825;
+}
+
+.diff-container::-webkit-scrollbar-thumb {
+  background: #45475a;
+  border-radius: 4px;
+}
+
+.diff-container::-webkit-scrollbar-thumb:hover {
+  background: #585b70;
+}

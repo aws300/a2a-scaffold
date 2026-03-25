@@ -1,0 +1,12 @@
+/* ============================================
+   OpenCode Component Styles
+   Import all component-specific CSS files
+   ============================================ */
+
+@import './basic-tool.css';
+@import './collapsible.css';
+@import './question.css';
+@import './diff.css';
+@import './permission.css';
+@import './preview.css';
+@import './session-turn.css';

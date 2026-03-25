@@ -1,0 +1,131 @@
+/* ============================================
+   Collapsible - Expandable container component
+   Adapted from OpenCode for AgentX
+   ============================================ */
+
+.collapsible {
+  overflow: hidden;
+}
+
+.collapsible-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.15s ease;
+}
+
+.collapsible-trigger:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.collapsible-trigger-content {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.collapsible-chevron {
+  color: var(--text-muted);
+  transition: transform 0.2s ease;
+  flex-shrink: 0;
+}
+
+.collapsible-chevron-open {
+  transform: rotate(180deg);
+}
+
+/* Content wrapper for animation */
+.collapsible-content-wrapper {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.2s ease;
+}
+
+.collapsible-content-wrapper-open {
+  grid-template-rows: 1fr;
+}
+
+.collapsible-content {
+  overflow: hidden;
+}
+
+/* Alternative animation using max-height */
+.collapsible-content-animated {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.2s ease;
+}
+
+.collapsible-content-animated-open {
+  max-height: 2000px; /* Large enough for most content */
+}
+
+/* Fade in animation for content */
+.collapsible-fade {
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.collapsible-fade-visible {
+  opacity: 1;
+}
+
+/* Details/summary native collapsible styling */
+details.collapsible-details {
+  overflow: hidden;
+}
+
+details.collapsible-details summary {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  cursor: pointer;
+  user-select: none;
+  list-style: none;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  border-radius: 0.5rem;
+  transition: all 0.15s ease;
+}
+
+details.collapsible-details summary::-webkit-details-marker {
+  display: none;
+}
+
+details.collapsible-details summary:hover {
+  background: rgba(255, 255, 255, 0.3);
+  color: var(--text-primary);
+}
+
+details.collapsible-details summary .collapsible-chevron {
+  transition: transform 0.2s ease;
+}
+
+details.collapsible-details[open] summary .collapsible-chevron {
+  transform: rotate(180deg);
+}
+
+details.collapsible-details .collapsible-details-content {
+  padding: 0.5rem 0.75rem;
+  animation: slideDown 0.2s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
