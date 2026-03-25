@@ -6,6 +6,7 @@ Stripped version: no JWT authentication, static agent card from config.
 from __future__ import annotations
 
 import json
+import os
 import time
 from typing import Any
 
@@ -63,9 +64,9 @@ class _DispatchASGI:
     """Minimal ASGI dispatcher — routes Connect/gRPC requests to service apps.
     Also serves static frontend files and manages agent configuration."""
 
-    STATIC_DIR = "/usr/share/nginx/html"
-    AGENT_MD_PATH = "/agent/config/AGENT.md"
-    SKILLS_DIR = "/agent/config/skills"
+    STATIC_DIR = os.environ.get("STATIC_DIR", "/usr/share/nginx/html")
+    AGENT_MD_PATH = os.environ.get("AGENT_MD_PATH", "/agent/config/AGENT.md")
+    SKILLS_DIR = os.environ.get("SKILLS_DIR", "/agent/config/skills")
 
     def __init__(self, apps: list[Any], agent_name: str = "", agent_description: str = "") -> None:
         self._apps = apps

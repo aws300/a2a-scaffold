@@ -82,7 +82,7 @@ async def _serve():
     data_base_path = svc_cfg.get("dataBasePath", "/agent/data")
 
     # Load system prompt from AGENT.md body (the primary source of agent behavior)
-    agent_md_path = "/agent/config/AGENT.md"
+    agent_md_path = os.environ.get("AGENT_MD_PATH", "/agent/config/AGENT.md")
     system_prompt = ""
     if os.path.isfile(agent_md_path):
         import re
