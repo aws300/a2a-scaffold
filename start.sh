@@ -67,6 +67,10 @@ setup_local_env() {
 
   # Override /agent/data with local writable directory
   export AGENT_DATA_DIR="$LOCAL_DATA_DIR"
+
+  # Default identity for local mode (override via .env or command line)
+  export PROJECT_ID="${PROJECT_ID:-todo_project_id}"
+  export USER_SUB="${USER_SUB:-todo_user_id}"
 }
 
 # ── Docker mode ──────────────────────────────────────────────────────────────

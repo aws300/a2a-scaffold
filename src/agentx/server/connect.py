@@ -280,6 +280,13 @@ class _DispatchASGI:
 
         # ── Connect/gRPC (POST with correct content-type) ──
         if scope["type"] == "http" and method == "POST":
+            # Set user identity context vars for scaffold mode (no JWT)
+            try:
+                from agentx.tools.connector_tool import current_user_sub, current_backend_addr
+                current_user_sub.set(os.environ.get("USER_SUB", "todo_user_id"))
+            except ImportError:
+                pass
+
             content_type = ""
             for header_name, header_value in scope.get("headers", []):
                 if header_name == b"content-type":

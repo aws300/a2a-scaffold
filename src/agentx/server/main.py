@@ -104,10 +104,16 @@ async def _serve():
             except Exception:
                 pass
 
+    project_id = os.environ.get("PROJECT_ID", "todo_project_id")
+    user_sub = os.environ.get("USER_SUB", "todo_user_id")
+
     print(f"[A2A Scaffold] Agent: {agent_name}", flush=True)
     print(f"[A2A Scaffold] Model: {model_id}", flush=True)
     print(f"[A2A Scaffold] Skills: {skills_dir}", flush=True)
     print(f"[A2A Scaffold] MCP:    {mcp_config_path}", flush=True)
+    print(f"[A2A Scaffold] Data:   {data_base_path}", flush=True)
+    print(f"[A2A Scaffold] Project: {project_id}", flush=True)
+    print(f"[A2A Scaffold] User:    {user_sub}", flush=True)
     print(f"[A2A Scaffold] System prompt: {len(system_prompt)} chars from AGENT.md", flush=True)
 
     # ── Create A2A service ──
