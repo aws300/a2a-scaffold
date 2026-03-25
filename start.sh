@@ -129,27 +129,26 @@ check_node() {
 }
 
 ensure_node_modules() {
-  cd "$SCRIPT_DIR/frontend"
+  local frontend_dir="$SCRIPT_DIR/frontend"
   # Check if node_modules exists AND platform binaries work
-  if [ -d "node_modules" ]; then
-    if node -e "require('lightningcss')" 2>/dev/null; then
+  if [ -d "$frontend_dir/node_modules" ]; then
+    if node -e "require('$frontend_dir/node_modules/lightningcss')" 2>/dev/null; then
       log "node_modules OK (cached)"
-      cd "$SCRIPT_DIR"
       return
     fi
     warn "node_modules has wrong platform binaries, reinstalling..."
-    rm -rf node_modules
+    rm -rf "$frontend_dir/node_modules"
   fi
   log "Installing frontend dependencies..."
-  npm install --legacy-peer-deps
+  (cd "$frontend_dir" && npm install --legacy-peer-deps)
   ok "Frontend dependencies installed"
-  cd "$SCRIPT_DIR"
 }
 
 build_frontend() {
+  local out_dir="$LOCAL_STATIC_DIR"
   # Skip if already built and source hasn't changed
-  if [ -f "$LOCAL_STATIC_DIR/index.html" ]; then
-    local src_newest=$(find "$SCRIPT_DIR/frontend/src" -type f -newer "$LOCAL_STATIC_DIR/index.html" 2>/dev/null | head -1)
+  if [ -f "$out_dir/index.html" ]; then
+    local src_newest=$(find "$SCRIPT_DIR/frontend/src" -type f -newer "$out_dir/index.html" 2>/dev/null | head -1)
     if [ -z "$src_newest" ]; then
       log "Frontend already built (cached)"
       return
@@ -159,13 +158,13 @@ build_frontend() {
     log "Building frontend..."
   fi
 
-  cd "$SCRIPT_DIR/frontend"
+  check_node
   ensure_node_modules
-  # Use project-local vite (not npx global) to avoid version mismatch
-  ./node_modules/.bin/vite build --config vite.config.scaffold.ts
+
+  (cd "$SCRIPT_DIR/frontend" && ./node_modules/.bin/vite build --config vite.config.scaffold.ts)
+
   # Rename entry HTML
-  mv "$LOCAL_STATIC_DIR/a2a-scaffold.html" "$LOCAL_STATIC_DIR/index.html" 2>/dev/null || true
-  cd "$SCRIPT_DIR"
+  mv "$out_dir/a2a-scaffold.html" "$out_dir/index.html" 2>/dev/null || true
   ok "Frontend built → frontend/dist/scaffold/"
 }
 
@@ -176,7 +175,6 @@ start_local() {
 
   check_python
   setup_venv
-  check_node
   build_frontend
   setup_local_env
 
@@ -195,9 +193,8 @@ start_dev() {
   setup_venv
   setup_local_env
 
-  cd "$SCRIPT_DIR/frontend"
+  check_node
   ensure_node_modules
-  cd "$SCRIPT_DIR"
 
   # Start Python backend in background
   log "Starting Python backend on :8080..."
@@ -206,11 +203,8 @@ start_dev() {
 
   # Start Vite dev server with proxy
   log "Starting frontend dev server on :5173..."
-  cd "$SCRIPT_DIR/frontend"
-  ensure_node_modules
-  ./node_modules/.bin/vite --config vite.config.scaffold.ts --port 5173 &
+  (cd "$SCRIPT_DIR/frontend" && ./node_modules/.bin/vite --config vite.config.scaffold.ts --port 5173) &
   FRONTEND_PID=$!
-  cd "$SCRIPT_DIR"
 
   ok "Dev server running:"
   ok "  Frontend: http://localhost:5173  (HMR)"
