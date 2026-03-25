@@ -20,6 +20,7 @@ from __future__ import annotations
 import asyncio
 import hashlib
 import json
+import os
 import logging
 import time
 import uuid
@@ -541,7 +542,7 @@ class A2AServicer:
         - Fallback: /agent/data
         """
         import os, re
-        base = "/agent/data"
+        base = os.environ.get("AGENT_DATA_DIR", "/agent/data")
 
         # Priority 1: explicit project_id from metadata
         if project_id and "/" not in project_id:
@@ -867,6 +868,12 @@ class A2AServicer:
         meta_dict = self._parse_metadata(msg)
         project_id = meta_dict.get("project_id", meta_dict.get("projectId", ""))
         user_sub = meta_dict.get("user_sub", meta_dict.get("userSub", ""))
+
+        # Scaffold mode: fall back to env vars if metadata is empty
+        if not project_id:
+            project_id = os.environ.get("PROJECT_ID", "default")
+        if not user_sub:
+            user_sub = os.environ.get("USER_SUB", "default")
 
         # Parse playground config from metadata
         pg_config = PlaygroundConfig.from_metadata(meta_dict)
