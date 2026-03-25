@@ -157,7 +157,8 @@ build_frontend() {
 
   cd "$SCRIPT_DIR/frontend"
   ensure_node_modules
-  npx vite build --config vite.config.scaffold.ts
+  # Use project-local vite (not npx global) to avoid version mismatch
+  ./node_modules/.bin/vite build --config vite.config.scaffold.ts
   # Rename entry HTML
   mv "$LOCAL_STATIC_DIR/a2a-scaffold.html" "$LOCAL_STATIC_DIR/index.html" 2>/dev/null || true
   cd "$SCRIPT_DIR"
@@ -202,7 +203,8 @@ start_dev() {
   # Start Vite dev server with proxy
   log "Starting frontend dev server on :5173..."
   cd "$SCRIPT_DIR/frontend"
-  npx vite --config vite.config.scaffold.ts --port 5173 &
+  ensure_node_modules
+  ./node_modules/.bin/vite --config vite.config.scaffold.ts --port 5173 &
   FRONTEND_PID=$!
   cd "$SCRIPT_DIR"
 
