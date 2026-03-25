@@ -7,8 +7,8 @@
 # Stage 1: Build frontend SPA
 FROM node:20-slim AS frontend-builder
 WORKDIR /app
-COPY frontend/package.json frontend/package-lock.json ./
-RUN npm ci --legacy-peer-deps
+COPY frontend/package.json ./
+RUN npm install --legacy-peer-deps
 COPY frontend/ .
 RUN npx vite build --config vite.config.scaffold.ts
 

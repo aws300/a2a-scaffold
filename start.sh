@@ -92,7 +92,7 @@ build_frontend() {
     log "Building frontend..."
     cd frontend
     if [ ! -d "node_modules" ]; then
-      npm ci --legacy-peer-deps --silent
+      npm install --legacy-peer-deps --silent
     fi
     npx vite build --config vite.config.scaffold.ts
     cd ..
@@ -173,7 +173,7 @@ start_dev() {
   log "Starting frontend dev server on :5173..."
   cd frontend
   if [ ! -d "node_modules" ]; then
-    npm ci --legacy-peer-deps --silent
+    npm install --legacy-peer-deps --silent
   fi
   npx vite --config vite.config.scaffold.ts --port 5173 &
   FRONTEND_PID=$!
