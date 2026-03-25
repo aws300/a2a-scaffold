@@ -43,6 +43,42 @@ print_banner() {
   echo ""
 }
 
+check_credentials() {
+  # At least one AI credential must be configured
+  if [ -n "$AWS_BEARER_TOKEN_BEDROCK" ]; then
+    log "Auth: AWS Bedrock API Key"
+    return 0
+  fi
+  if [ -n "$AWS_ACCESS_KEY_ID" ] && [ -n "$AWS_SECRET_ACCESS_KEY" ]; then
+    log "Auth: AWS IAM credentials"
+    return 0
+  fi
+  if [ -n "$ANTHROPIC_API_KEY" ]; then
+    log "Auth: Anthropic API Key"
+    [ -n "$ANTHROPIC_BASE_URL" ] && log "Auth: Anthropic base URL: $ANTHROPIC_BASE_URL"
+    return 0
+  fi
+
+  err "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+  err "No AI credentials found! Edit .env with one of:"
+  err ""
+  err "  Method A — AWS Bedrock API Key (simplest):"
+  err "    AWS_BEARER_TOKEN_BEDROCK=ABSKQ..."
+  err ""
+  err "  Method B — AWS IAM credentials:"
+  err "    AWS_ACCESS_KEY_ID=AKIA..."
+  err "    AWS_SECRET_ACCESS_KEY=..."
+  err ""
+  err "  Method C — Anthropic API:"
+  err "    ANTHROPIC_API_KEY=sk-ant-..."
+  err "    ANTHROPIC_BASE_URL=https://api.anthropic.com  (optional)"
+  err "    MODEL=anthropic://claude-sonnet-4-20250514"
+  err ""
+  err "Get a Bedrock API key: https://console.aws.amazon.com/bedrock/home#/api-keys"
+  err "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+  exit 1
+}
+
 # ── Local paths (all relative to SCRIPT_DIR) ─────────────────────────────────
 
 LOCAL_DATA_DIR="$SCRIPT_DIR/.data"
@@ -172,6 +208,7 @@ build_frontend() {
 
 start_local() {
   log "Starting locally (no Docker)..."
+  check_credentials
 
   check_python
   setup_venv
@@ -187,6 +224,7 @@ start_local() {
 
 start_dev() {
   log "Starting in dev mode..."
+  check_credentials
 
   check_python
   check_node

@@ -66,16 +66,28 @@ async def _serve():
             print(f"[A2A Scaffold] Warning: Failed to decode AWS_BEARER_TOKEN_BEDROCK: {e}", flush=True)
 
     # Parse model URI: "bedrock://model-id?region=xxx" → just "model-id"
+    # Detect model provider for proper initialization
+    model_provider = "bedrock"  # default
     if model_id.startswith("bedrock://"):
         from urllib.parse import urlparse, parse_qs
         parsed = urlparse(model_id)
         model_id = parsed.netloc + parsed.path  # e.g. "us.anthropic.claude-opus-4-6-v1"
-        # Extract region from query params if present
         qs = parse_qs(parsed.query)
         if "region" in qs:
             os.environ.setdefault("AWS_DEFAULT_REGION", qs["region"][0])
     elif model_id.startswith("anthropic://"):
         model_id = model_id.replace("anthropic://", "")
+        model_provider = "anthropic"
+    elif os.environ.get("ANTHROPIC_API_KEY"):
+        # No explicit model URI but Anthropic key is set → use Anthropic
+        model_provider = "anthropic"
+        if not model_id:
+            model_id = "claude-sonnet-4-20250514"
+
+    # Pass ANTHROPIC_BASE_URL to the Anthropic SDK if set
+    anthropic_base_url = os.environ.get("ANTHROPIC_BASE_URL", "")
+    if anthropic_base_url:
+        print(f"[A2A Scaffold] Anthropic base URL: {anthropic_base_url}", flush=True)
     agent_name = os.environ.get("AGENT_NAME", svc_cfg.get("agent_name", "A2A Agent"))
     skills_dir = os.environ.get("SKILLS_DIR", svc_cfg.get("skills_dir", "/agent/config/skills"))
     mcp_config_path = os.environ.get("MCP_CONFIG", svc_cfg.get("mcp_config_path", "/agent/config/mcp.json"))

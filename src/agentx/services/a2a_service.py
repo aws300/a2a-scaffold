@@ -136,6 +136,35 @@ def _get_default_system_prompt() -> str:
         )
 
 
+def _create_model(model_id: str) -> Any:
+    """Create an AI model instance based on available credentials.
+
+    Supports:
+    - AWS Bedrock (default): uses BedrockModel with IAM or API key auth
+    - Anthropic API: uses AnthropicModel when ANTHROPIC_API_KEY is set
+      - ANTHROPIC_BASE_URL: custom endpoint (e.g. proxy or self-hosted)
+    """
+    anthropic_key = os.environ.get("ANTHROPIC_API_KEY", "")
+    if anthropic_key:
+        try:
+            from strands.models.anthropic import AnthropicModel
+            kwargs: dict[str, Any] = {"model_id": model_id, "max_tokens": 16384}
+            base_url = os.environ.get("ANTHROPIC_BASE_URL", "")
+            if base_url:
+                kwargs["base_url"] = base_url
+            return AnthropicModel(**kwargs)
+        except ImportError:
+            _std_log.warning("strands AnthropicModel not available, falling back to Bedrock")
+
+    # Default: Bedrock
+    from strands.models.bedrock import BedrockModel
+    return BedrockModel(
+        model_id=model_id,
+        region_name=os.environ.get("AWS_DEFAULT_REGION", "us-west-2"),
+        max_tokens=16384,
+    )
+
+
 def _get_or_create_agent(
     model_id: str,
     skills_dir: str,
@@ -153,13 +182,7 @@ def _get_or_create_agent(
         return _agent
 
     from strands import Agent
-    from strands.models.bedrock import BedrockModel
-
-    model = BedrockModel(
-        model_id=model_id,
-        region_name="us-west-2",
-        max_tokens=16384,
-    )
+    model = _create_model(model_id)
 
     tools = _get_base_tools()
 
@@ -224,14 +247,9 @@ def _get_or_create_playground_agent(
         return _playground_agents[cache_key]
 
     from strands import Agent
-    from strands.models.bedrock import BedrockModel
 
     model_id = pg_config.model_id or default_model_id
-    model = BedrockModel(
-        model_id=model_id,
-        region_name="us-west-2",
-        max_tokens=16384,
-    )
+    model = _create_model(model_id)
 
     tools = _get_base_tools()
 
