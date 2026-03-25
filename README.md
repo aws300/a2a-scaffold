@@ -4,22 +4,11 @@ A standalone A2A (Agent-to-Agent) server with a built-in chat UI. Deploy anywher
 
 ## Quick Start
 
-### Step 1: Get an AI Model API Key
+### Step 1: Get an AWS Bedrock API Key
 
-You need **one** of the following:
-
-**Option A — AWS Bedrock API Key** (recommended for getting started):
 1. Go to [AWS Bedrock Console → API Keys](https://console.aws.amazon.com/bedrock/home#/api-keys)
 2. Click "Create API key"
 3. Copy the key (starts with `ABSK...`)
-
-**Option B — AWS IAM Credentials** (for production):
-1. Create an IAM user with `bedrock:InvokeModel` permission
-2. Get the Access Key ID and Secret Access Key
-
-**Option C — Anthropic API Key** (no AWS needed):
-1. Go to [Anthropic Console → API Keys](https://console.anthropic.com/settings/keys)
-2. Create a new key (starts with `sk-ant-...`)
 
 ### Step 2: Configure
 
@@ -30,16 +19,7 @@ cp .env.example .env
 Edit `.env` and paste your key:
 
 ```bash
-# Option A: Bedrock API Key (simplest)
 AWS_BEARER_TOKEN_BEDROCK=ABSKQ...your_key_here
-
-# Option B: AWS IAM
-# AWS_DEFAULT_REGION=us-west-2
-# AWS_ACCESS_KEY_ID=AKIA...
-# AWS_SECRET_ACCESS_KEY=...
-
-# Option C: Anthropic
-# ANTHROPIC_API_KEY=sk-ant-...
 ```
 
 ### Step 3: Customize Your Agent (optional)
