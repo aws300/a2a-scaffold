@@ -391,7 +391,7 @@ class _DispatchASGI:
             await _json_response(send, 400, {"error": str(e)})
 
     # ── File upload handler ──────────────────────────────────────────────
-    UPLOAD_DIR = "/agent/data/uploads"
+    UPLOAD_DIR = os.environ.get("AGENT_DATA_DIR", "/agent/data") + "/uploads"
 
     async def _handle_file_upload(self, scope: Any, receive: Any, send: Any) -> None:
         """Handle multipart file upload — saves files to UPLOAD_DIR.

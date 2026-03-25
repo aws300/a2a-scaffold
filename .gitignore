@@ -9,14 +9,16 @@ __pycache__/
 *.egg-info/
 dist/
 build/
+src/agentx.egg-info/
 
 # Node.js / Frontend
 frontend/node_modules/
 frontend/dist/
 frontend/package-lock.json
 
-# Docker
+# Docker / runtime data
 agent-data/
+.data/
 
 # OS
 .DS_Store

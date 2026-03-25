@@ -79,7 +79,10 @@ async def _serve():
     agent_name = os.environ.get("AGENT_NAME", svc_cfg.get("agent_name", "A2A Agent"))
     skills_dir = os.environ.get("SKILLS_DIR", svc_cfg.get("skills_dir", "/agent/config/skills"))
     mcp_config_path = os.environ.get("MCP_CONFIG", svc_cfg.get("mcp_config_path", "/agent/config/mcp.json"))
-    data_base_path = svc_cfg.get("dataBasePath", "/agent/data")
+    data_base_path = os.environ.get("AGENT_DATA_DIR", svc_cfg.get("dataBasePath", "/agent/data"))
+
+    # Ensure data directory exists and is writable
+    os.makedirs(data_base_path, exist_ok=True)
 
     # Load system prompt from AGENT.md body (the primary source of agent behavior)
     agent_md_path = os.environ.get("AGENT_MD_PATH", "/agent/config/AGENT.md")
