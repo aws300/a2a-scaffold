@@ -143,34 +143,87 @@ class _DispatchASGI:
         self._agent_description = cfg.get("description", self._agent_description)
 
     def _scan_skills(self) -> list[dict]:
-        """Scan skills directory for .md files and return skill list."""
-        import os, re
+        """Scan skills directory for {skill-name}/SKILL.md subdirectories.
+
+        Expected layout (AgentSkills.io standard):
+          skills/
+          ├── drawio/
+          │   ├── SKILL.md          ← required
+          │   └── references/       ← optional resources
+          ├── mcp-builder/
+          │   ├── SKILL.md
+          │   ├── scripts/
+          │   └── reference/
+          └── frontend-design/
+              └── SKILL.md
+        """
+        import re
         skills = []
         if not os.path.isdir(self.SKILLS_DIR):
             return skills
-        for fn in sorted(os.listdir(self.SKILLS_DIR)):
-            if not fn.endswith(".md"):
+
+        for entry in sorted(os.listdir(self.SKILLS_DIR)):
+            skill_dir = os.path.join(self.SKILLS_DIR, entry)
+            if not os.path.isdir(skill_dir):
                 continue
-            skill_id = fn.rsplit(".", 1)[0]
-            filepath = os.path.join(self.SKILLS_DIR, fn)
-            # Read first 5 lines for description
+
+            # Look for SKILL.md (case-sensitive) or skill.md (fallback)
+            skill_md = None
+            for candidate in ("SKILL.md", "skill.md"):
+                path = os.path.join(skill_dir, candidate)
+                if os.path.isfile(path):
+                    skill_md = path
+                    break
+            if not skill_md:
+                continue
+
+            skill_id = entry  # directory name = skill ID
+
+            # Parse SKILL.md frontmatter for name and description
+            name = skill_id.replace("-", " ").replace("_", " ").title()
             desc = ""
             try:
-                with open(filepath, "r", encoding="utf-8") as f:
-                    lines = f.readlines()[:5]
-                    for line in lines:
+                with open(skill_md, "r", encoding="utf-8") as f:
+                    content = f.read()
+                # Parse YAML frontmatter
+                fm_match = re.match(r'^---\s*\n(.*?)\n---\s*\n', content, re.DOTALL)
+                if fm_match:
+                    import yaml
+                    try:
+                        fm = yaml.safe_load(fm_match.group(1)) or {}
+                        name = fm.get("name", name)
+                        desc = fm.get("description", "")
+                    except Exception:
+                        pass
+                # Fallback description: first non-empty, non-heading line after frontmatter
+                if not desc:
+                    body = content[fm_match.end():] if fm_match else content
+                    for line in body.strip().split("\n"):
                         stripped = line.strip().lstrip("#").strip()
                         if stripped and not stripped.startswith("---"):
-                            desc = stripped
+                            desc = stripped[:200]
                             break
             except Exception:
                 pass
+
+            # Count resource files (scripts, references, templates, etc.)
+            resource_count = 0
+            for root, dirs, files in os.walk(skill_dir):
+                if root == skill_dir:
+                    continue  # skip SKILL.md itself
+                resource_count += len(files)
+
+            tags = ["skill"]
+            if resource_count > 0:
+                tags.append("has-resources")
+
             skills.append({
                 "id": skill_id,
-                "name": skill_id.replace("-", " ").replace("_", " ").title(),
+                "name": name,
                 "description": desc or f"Skill: {skill_id}",
-                "tags": ["skill"],
+                "tags": tags,
             })
+
         return skills
 
     def _build_agent_card(self, base_url: str = "") -> dict:

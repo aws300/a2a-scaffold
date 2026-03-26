@@ -21,4 +21,3 @@ strands-agents>=1.29.0
 strands-agents-tools>=0.2.22
 # AG-UI protocol — standard agent-UI event types for real-time status updates
 ag-ui-protocol>=0.1.10
-strands-agents-anthropic>=0.1.0

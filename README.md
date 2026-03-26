@@ -100,16 +100,49 @@ Always explain your reasoning before writing code.
 | `iconUrl` | No | URL to agent icon |
 | `documentationUrl` | No | URL to documentation |
 
-### Skills (agent-config/skills/*.md)
+### Skills (agent-config/skills/)
 
-Drop `.md` files to extend the agent's capabilities:
+Skills follow the [AgentSkills.io](https://agentskills.io) standard. Each skill is a **subdirectory** with a `SKILL.md` file:
 
 ```
 agent-config/skills/
-├── code-review.md      → "Code Review" skill
-├── data-analysis.md    → "Data Analysis" skill
-└── api-design.md       → "Api Design" skill
+├── my-code-reviewer/
+│   └── SKILL.md                ← Required: YAML frontmatter + instructions
+├── my-api-designer/
+│   ├── SKILL.md
+│   ├── scripts/                ← Optional: helper scripts the agent can run
+│   │   └── validate.py
+│   └── references/             ← Optional: reference docs the agent can read
+│       └── api-standards.md
+└── my-devops-skill/
+    ├── SKILL.md
+    └── templates/
+        └── dockerfile.tmpl
 ```
+
+**SKILL.md format:**
+
+```markdown
+---
+name: my-code-reviewer
+description: Perform thorough code reviews with best practices
+---
+
+# Code Reviewer
+
+You are a code review expert. When reviewing code:
+
+1. Check for correctness, security, and performance
+2. Suggest improvements with code examples
+3. Flag any anti-patterns
+```
+
+**Rules:**
+- Directory name = skill ID (kebab-case: `my-code-reviewer`)
+- `SKILL.md` frontmatter must have `name` and `description`
+- `name` should match the directory name
+- Resource files (`scripts/`, `references/`, `templates/`) are accessible to the agent via `file_read`
+- Skills are auto-detected on startup and listed in the agent card
 
 ### MCP Tools (agent-config/mcp.json)
 
@@ -214,8 +247,9 @@ a2a-scaffold/
 ├── .env                            # ← Your API keys (not committed)
 ├── agent-config/
 │   ├── mcp.json                    # ← MCP tool configuration
-│   └── skills/                     # ← Drop .md skill files here
-│       └── example-skill.md
+│   └── skills/                     # ← Skill directories (AgentSkills.io format)
+│       └── example-skill/
+│           └── SKILL.md
 ├── configs/config.yaml             # Server configuration
 ├── examples/a2a_client.py          # Example A2A client
 ├── frontend/                       # Chat UI source (SolidJS + Vite)

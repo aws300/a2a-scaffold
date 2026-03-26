@@ -24,7 +24,6 @@ dependencies = [
     "uvicorn>=0.34.0",
     "strands-agents>=1.29.0",
     "strands-agents-tools>=0.2.22",
-    "strands-agents-anthropic>=0.1.0",
     "ag-ui-protocol>=0.1.10",
 ]
 
