@@ -53,6 +53,14 @@ check_credentials() {
     log "Auth: AWS IAM credentials"
     return 0
   fi
+  if [ -n "$AWS_WEB_IDENTITY_TOKEN_FILE" ] && [ -n "$AWS_ROLE_ARN" ]; then
+    log "Auth: AWS Web Identity Token (IRSA/EKS)"
+    return 0
+  fi
+  if [ -n "$AWS_PROFILE" ]; then
+    log "Auth: AWS Profile ($AWS_PROFILE)"
+    return 0
+  fi
   if [ -n "$ANTHROPIC_API_KEY" ]; then
     log "Auth: Anthropic API Key"
     [ -n "$ANTHROPIC_BASE_URL" ] && log "Auth: Anthropic base URL: $ANTHROPIC_BASE_URL"
