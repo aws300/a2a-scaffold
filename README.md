@@ -13,9 +13,9 @@ Choose **one** of the following:
 2. Click "Create API key"
 3. Copy the key (starts with `ABSK...`)
 
-**Option B — Custom LLM API Key** (Anthropic or compatible):
+**Option B — Custom LLM API Key** (Anthropic-compatible):
 1. Get an API key from your LLM provider
-2. Get the API base URL (e.g. `https://api.anthropic.com` or your own proxy)
+2. Get the API base URL from your provider or proxy
 
 ### Step 2: Configure
 
