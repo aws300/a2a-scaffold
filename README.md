@@ -4,11 +4,18 @@ A standalone A2A (Agent-to-Agent) server with a built-in chat UI. Deploy anywher
 
 ## Quick Start
 
-### Step 1: Get an AWS Bedrock API Key
+### Step 1: Get an API Key
 
+Choose **one** of the following:
+
+**Option A — AWS Bedrock API Key** (recommended):
 1. Go to [AWS Bedrock Console → API Keys](https://console.aws.amazon.com/bedrock/home#/api-keys)
 2. Click "Create API key"
 3. Copy the key (starts with `ABSK...`)
+
+**Option B — Custom LLM API Key** (Anthropic or compatible):
+1. Get an API key from your LLM provider
+2. Get the API base URL (e.g. `https://api.anthropic.com` or your own proxy)
 
 ### Step 2: Configure
 
@@ -16,10 +23,16 @@ A standalone A2A (Agent-to-Agent) server with a built-in chat UI. Deploy anywher
 cp .env.example .env
 ```
 
-Edit `.env` and paste your key:
+Edit `.env` — choose one option:
 
 ```bash
+# Option A: AWS Bedrock API Key
 AWS_BEARER_TOKEN_BEDROCK=ABSKQ...your_key_here
+
+# Option B: Custom LLM API (Anthropic or compatible)
+# ANTHROPIC_BASE_URL=https://llmapi.example.com
+# ANTHROPIC_API_KEY=sk-ant-your_key_here
+# MODEL=anthropic://claude-sonnet-4-6
 ```
 
 ### Step 3: Customize Your Agent (optional)
